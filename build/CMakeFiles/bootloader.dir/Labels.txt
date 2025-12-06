@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/CMakeFiles/bootloader
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/CMakeFiles/bootloader.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/CMakeFiles/bootloader-complete.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

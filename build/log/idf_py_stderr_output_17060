@@ -1,0 +1,1 @@
+Command: cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DPYTHON=C:\Espressif\python_env\idf5.5_py3.11_env\Scripts\python.exe -DESP_PLATFORM=1 -DSDKCONFIG='f:\code\ESP\Edge AI\Example\ESP32CamExam\esp32_cam_ex1\ESP32_cam_ex1\sdkconfig' -DCCACHE_ENABLE=1 F:\code\ESP\Edge AI\Example\ESP32CamExam\esp32_cam_ex1\ESP32_cam_ex1
