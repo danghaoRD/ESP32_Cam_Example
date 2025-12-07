@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "ESP32_cam_ex1",
-    "project_version":    "1",
+    "project_version":    "01a1f69-dirty",
     "project_path":       "F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1",
     "idf_path":           "C:/Users/MY PC/esp/v5.5.1/esp-idf",
     "build_dir":          "F:/code/ESP/Edge AI/Example/ESP32CamExam/esp32_cam_ex1/ESP32_cam_ex1/build",

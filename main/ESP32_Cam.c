@@ -65,6 +65,7 @@
 
 static const char *TAG = "example:take_picture";
 
+float fps = 0.0f;
 #if ESP_CAMERA_SUPPORTED
 static camera_config_t camera_config = {
     .pin_pwdn = CAM_PIN_PWDN,
@@ -90,13 +91,13 @@ static camera_config_t camera_config = {
     .ledc_timer = LEDC_TIMER_0,
     .ledc_channel = LEDC_CHANNEL_0,
 
-    .pixel_format = PIXFORMAT_RGB565, //YUV422,GRAYSCALE,RGB565,JPEG
+    .pixel_format = PIXFORMAT_JPEG, //PIXFORMAT_RGB565, //YUV422,GRAYSCALE,RGB565,JPEG
     .frame_size = FRAMESIZE_QVGA,    //QQVGA-UXGA, For ESP32, do not use sizes above QVGA when not JPEG. The performance of the ESP32-S series has improved a lot, but JPEG mode always gives better frame rates.
 
     .jpeg_quality = 12, //0-63, for OV series camera sensors, lower number means higher quality
-    .fb_count = 1,       //When jpeg mode is used, if fb_count more than one, the driver will work in continuous mode.
+    .fb_count = 3,       //When jpeg mode is used, if fb_count more than one, the driver will work in continuous mode.
     .fb_location = CAMERA_FB_IN_PSRAM,
-    .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
+    .grab_mode = CAMERA_GRAB_LATEST,
 };
 
 static esp_err_t init_camera(void)
@@ -131,7 +132,7 @@ esp_err_t jpg_stream_httpd_handler(httpd_req_t *req){
     uint8_t * jpg_buf = NULL;
     char part_buf[64];
     static int64_t last_frame = 0;
-    if(!last_frame) {
+        if(!last_frame) {
         last_frame = esp_timer_get_time();
     }
 
@@ -189,7 +190,7 @@ esp_err_t jpg_stream_httpd_handler(httpd_req_t *req){
         int64_t frame_time = fr_end - last_frame;
         last_frame = fr_end;
         frame_time /= 1000;
-        float fps = frame_time > 0 ? 1000.0f / (float)frame_time : 0.0f;
+        fps = frame_time > 0 ? 1000.0f / (float)frame_time : 0.0f;
         ESP_LOGI(TAG, "MJPG: %uKB %ums (%.1ffps)",
             (uint32_t)(jpg_buf_len/1024),
             (uint32_t)frame_time, fps);
@@ -254,15 +255,34 @@ esp_err_t jpg_httpd_handler(httpd_req_t *req){
 static httpd_uri_t stream_uri = {
     .uri       = "/stream",
     .method    = HTTP_GET,
-    //.handler   = jpg_stream_httpd_handler,
+    #if(EXAMPLE_RUN == ESP_CAM_EXAMPLE_2)
+    .handler   = jpg_stream_httpd_handler,
+    #else
     .handler   = jpg_httpd_handler,
+    #endif
     .user_ctx  = NULL
+};
+
+
+esp_err_t fps_handler(httpd_req_t *req){
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%.1ffps", fps); // current_fps bạn tính trong jpg_stream_httpd_handler
+    httpd_resp_send(req, buf, strlen(buf));
+    return ESP_OK;
+}
+
+httpd_uri_t fps_uri = {
+    .uri       = "/fps",          // đường dẫn trên web
+    .method    = HTTP_GET,        // HTTP method
+    .handler   = fps_handler,     // hàm xử lý request
+    .user_ctx  = NULL             // dữ liệu tuỳ ý, không dùng thì NULL
 };
 
 static void start_http_server(void)
 {
     if (server) return;
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+
     if (httpd_start(&server, &config) == ESP_OK) {
         httpd_register_uri_handler(server, &stream_uri);
         ESP_LOGI(TAG, "HTTP server started");
@@ -354,6 +374,7 @@ void wifi_init_softap(void)
     // 4. init wifi driver
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+    ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_NONE));
 
     // 5. cấu hình AP
     wifi_config_t wifi_config = {
@@ -391,6 +412,8 @@ httpd_handle_t start_webserver(void)
 
         // Handler stream video MJPEG
         httpd_register_uri_handler(server, &stream_uri);
+
+        httpd_register_uri_handler(server, &fps_uri);
 
         return server;
     }

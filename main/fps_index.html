@@ -1,0 +1,23 @@
+<html>
+  <body>
+    <div>
+      <img id="camera_stream" src="stream" />
+      <div id="fps_display" style="position:absolute; top:10px; left:10px; color:#ff0000; font-size:20px;">
+        FPS: 0
+      </div>
+    </div>
+
+    <script>
+      // Hàm cập nhật FPS từ server
+      function updateFPS() {
+        fetch('/fps')          // ESP32 sẽ trả về số FPS
+          .then(response => response.text())
+          .then(fps => {
+            document.getElementById('fps_display').innerText = "FPS: " + fps;
+          });
+      }
+
+      setInterval(updateFPS, 500); // Cập nhật 2 lần/giây
+    </script>
+  </body>
+</html>
